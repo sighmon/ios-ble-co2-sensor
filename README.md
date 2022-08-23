@@ -2,6 +2,8 @@
 
 An iOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
 
+<img src="home-screen.png" width="20%">
+
 ## Hardware
 
 * [ESP32-C3](https://core-electronics.com.au/adafruit-qt-py-esp32-c3-wifi-dev-board-with-stemma-qt.html)
