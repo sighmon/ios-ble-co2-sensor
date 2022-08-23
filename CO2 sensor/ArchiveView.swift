@@ -12,7 +12,7 @@ struct ArchiveView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: false)],
         animation: .default)
     private var measurements: FetchedResults<Measurement>
     
@@ -20,7 +20,7 @@ struct ArchiveView: View {
         List {
             ForEach(measurements) { measurement in
                 NavigationLink {
-                    Text("\(Int(measurement.co2)) ppm\n\(String(format: "%.1f", measurement.temperature)) °C\n\(Int(measurement.humidity)) %RH \n\n\(measurement.timestamp!, formatter: dateFormatter)")
+                    Text("\(Int(measurement.co2)) ppm\n\(String(format: "%.1f", measurement.temperature)) °C\n\(Int(measurement.humidity)) % \n\n\(measurement.timestamp!, formatter: dateFormatter)")
                 } label: {
                     Text("\(Int(measurement.co2)) ppm, \(String(format: "%.1f", measurement.temperature)) °C, \(Int(measurement.humidity)) %")
                 }

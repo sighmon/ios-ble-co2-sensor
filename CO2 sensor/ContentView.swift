@@ -23,8 +23,10 @@ struct ContentView: View {
             ZStack {
                 // Color(red: 0.9, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
                 VStack {
-                    Text("\(bleController.co2Value) ppm")
+                    Text("\(bleController.co2Value)")
                         .padding(.top, -60)
+                    Text("ppm CO₂")
+                        .font(.system(size: 30, weight: .light))
                         .padding(.bottom, 60)
                     Text("\(bleController.temperatureValue, specifier: "%.1f") °C")
                         .font(.system(size: 30, weight: .light))
@@ -51,7 +53,9 @@ struct ContentView: View {
                     }
                 }
             }
-            .font(.system(size: 50, weight: .medium))
+            .font(.system(size: 80, weight: .medium))
+            .onAppear { UIApplication.shared.isIdleTimerDisabled = true }
+            .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
         }
     }
 
@@ -92,6 +96,6 @@ private let dateFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
     }
 }

@@ -19,8 +19,8 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     @Published var rssiValue = 0
 
     // Source: https://github.com/Sensirion/arduino-ble-gadget/blob/master/src/Sensirion_GadgetBle_Lib.h
-    // TOFIX: currently retrieves historic data
     let co2Identifier = "50B30635-FC9C-57E6-A116-8FF87F780018"
+    // TOFIX: currently retrieves historic data
     let co2MonitorServiceUUID = CBUUID(string: "00008000-b38d-4985-720e-0f993a68ee41")
     let co2MonitorCharacteristicUUID = CBUUID(string: "00008004-b38d-4985-720e-0f993a68ee41")
 
@@ -93,6 +93,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         print("BLE Services: \(String(describing: peripheral.services))")
         peripheral.services?.forEach { service in
             peripheral.discoverCharacteristics(nil, for: service)
+            peripheral.discoverIncludedServices(nil, for: service)
         }
     }
 
@@ -102,26 +103,53 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
             if characteristic.uuid == co2MonitorCharacteristicUUID {
                 print("BLE Signing up for notifications from: \(characteristic)")
                 peripheral.setNotifyValue(true, for: characteristic)
+                peripheral.discoverDescriptors(for: characteristic)
             }
         }
     }
-    
+
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         print("BLE notification state changed: \(characteristic.isNotifying)")
     }
-    
+
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
         rssiValue = RSSI.intValue
     }
 
-    // TODO: Decode using https://github.com/custom-components/ble_monitor/blob/master/custom_components/ble_monitor/ble_parser/sensirion.py
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        print("BLE write value: \(characteristic)")
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor descriptor: CBDescriptor, error: Error?) {
+        print("BLE write value descriptor: \(descriptor)")
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
+        print("BLE value for descriptor: \(descriptor)")
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
+        print("BLE descriptors: \(characteristic)")
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverIncludedServicesFor service: CBService, error: Error?) {
+        print("BLE included services: \(service)")
+    }
+
+    // Decode using https://github.com/custom-components/ble_monitor/blob/master/custom_components/ble_monitor/ble_parser/sensirion.py
 
     func decodeTemperature(temperature: Int16) -> Double {
         return ((Double(temperature) / 65535) * 175) - 45
     }
-    
+
     func decodeHumidity(humidity: Int16) -> Double {
-        return 100 + ((Double(humidity) / 65535) * 100)
+        var humidity = ((Double(humidity) / 65535) * 100)
+        // When humidity is greater than or equal to 50.0 it returns a negative value
+        // and 100 needs to be added
+        if (humidity < 0) {
+            humidity = 100 + humidity
+        }
+        return humidity
     }
     
     func decodeCO2(co2: Int16) -> Int {
