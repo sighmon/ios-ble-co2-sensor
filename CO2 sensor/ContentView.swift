@@ -33,17 +33,30 @@ struct ContentView: View {
                     Text("\(bleController.humidityValue, specifier: "%.1f") %")
                         .font(.system(size: 30, weight: .light))
                         .padding(1)
-                    Text("📡   \(bleController.rssiValue)")
-                        .font(.system(size: 20, weight: .light))
-                        .padding(60)
+                    if bleController.isHistoryMode {
+                        Text("⏱   \(bleController.historicReadingNumber)")
+                            .font(.system(size: 20, weight: .light))
+                            .padding([.bottom, .top], 60)
+                    } else {
+                        Text("📡   \(bleController.rssiValue)")
+                            .font(.system(size: 20, weight: .light))
+                            .padding([.bottom, .top], 60)
+                    }
                     HStack {
                         Button("Save", action: addMeasurement)
                             .font(.system(size: 20, weight: .light))
                             .buttonStyle(.borderedProminent)
-                        Button("Reload", action: reconnectBLE)
-                            .font(.system(size: 20, weight: .light))
-                            .foregroundColor(.secondary)
-                            .buttonStyle(.bordered)
+                        if bleController.isHistoryMode {
+                            Button("Live", action: liveMode)
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundColor(.secondary)
+                                .buttonStyle(.bordered)
+                        } else {
+                            Button("History", action: historicMode)
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundColor(.secondary)
+                                .buttonStyle(.bordered)
+                        }
                         NavigationLink(destination: ArchiveView()) {
                             Text("Archive")
                                 .font(.system(size: 20, weight: .light))
@@ -78,12 +91,22 @@ struct ContentView: View {
         }
     }
     
-    private func reconnectBLE() {
+    private func historicMode() {
         bleController.co2Value = 0
         bleController.temperatureValue = 0
         bleController.humidityValue = 0
         bleController.rssiValue = 0
-        bleController.myCentral.cancelPeripheralConnection(bleController.myPeripheral)
+        bleController.historicReadingNumber = 0
+        bleController.historicMode()
+    }
+
+    private func liveMode() {
+        bleController.co2Value = 0
+        bleController.temperatureValue = 0
+        bleController.humidityValue = 0
+        bleController.rssiValue = 0
+        bleController.historicReadingNumber = 0
+        bleController.liveMode()
     }
 }
 

@@ -12,10 +12,12 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
 
     var myCentral: CBCentralManager!
     var myPeripheral: CBPeripheral!
-    @Published var isSwitchedOn = false
+    @Published var isBluetoothOn = false
+    @Published var isHistoryMode = false
     @Published var co2Value = 0
     @Published var temperatureValue = 0.0
     @Published var humidityValue = 0.0
+    @Published var historicReadingNumber = 0
     @Published var rssiValue = 0
 
     // Source: https://github.com/Sensirion/arduino-ble-gadget/blob/master/src/Sensirion_GadgetBle_Lib.h
@@ -32,11 +34,11 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {
-            isSwitchedOn = true
+            isBluetoothOn = true
             myCentral.scanForPeripherals(withServices: nil, options: nil)
         }
         else {
-            isSwitchedOn = false
+            isBluetoothOn = false
         }
     }
 
@@ -45,10 +47,6 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         if peripheral.identifier.uuidString == co2Identifier {
             myPeripheral = peripheral
             rssiValue = RSSI.intValue
-
-            // For historic data download, connect to the peripheral here
-            // central.stopScan()
-            // central.connect(peripheral, options: nil)
 
             // For realtime data, read the advertisementData
             let data = advertisementData["kCBAdvDataManufacturerData"] as! NSData
@@ -67,8 +65,8 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                 print("BLE raw data: \(co2) \(temperature) \(humidity)")
                 if co2 > 0 {
                     self.co2Value = decodeCO2(co2: co2)
-                    self.temperatureValue = decodeHistoricTemperature(temperature: temperature)
-                    self.humidityValue = decodeHistoricHumidity(humidity: humidity)
+                    self.temperatureValue = decodeTemperature(temperature: temperature)
+                    self.humidityValue = decodeHumidity(humidity: humidity)
                     print("BLE decoded data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
                 }
             }
@@ -83,16 +81,20 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("BLE Disconnected from \(peripheral)... retrying")
-        central.connect(peripheral)
+        print("BLE Disconnected from \(peripheral)")
+        // If we want to always be connected to historic data, retry
+        // central.connect(peripheral)
     }
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if error == nil {
             print("BLE raw: \(String(describing: characteristic.value?.hexadecimalString()))")
-
+            // Decode historic data
             let data = NSData(data: characteristic.value!)
             if !data.isEmpty {
+                let readingNumber = data.subdata(with: NSMakeRange(0, 2)).withUnsafeBytes {
+                    $0.load(as: Int16.self)
+                }
                 let temperature = data.subdata(with: NSMakeRange(8, 2)).withUnsafeBytes {
                     $0.load(as: Int16.self)
                 }
@@ -106,6 +108,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                     self.co2Value = decodeCO2(co2: co2)
                     self.temperatureValue = decodeTemperature(temperature: temperature)
                     self.humidityValue = decodeHumidity(humidity: humidity)
+                     self.historicReadingNumber = Int(readingNumber)
                     print("BLE data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
                 }
             }
@@ -160,25 +163,13 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         print("BLE included services: \(service)")
     }
 
-    // Decode using https://github.com/Sensirion/arduino-ble-gadget/issues/22#issuecomment-1227003043
-
-    func decodeTemperature(temperature: Int16) -> Double {
-        // From Sensirion: T = -45 + ((175.0 * ticks) / (2^16 - 1))
-        return -45 + ((175.0 * Double(temperature)) / Double((2^16 - 1)))
-    }
-
-    func decodeHumidity(humidity: Int16) -> Double {
-        // From Sensirion: RH = (100.0 * ticks) / (2^16 - 1)
-        return (100.0 * Double(humidity)) / Double((2^16 - 1))
-    }
-
     // Decode using https://github.com/custom-components/ble_monitor/blob/master/custom_components/ble_monitor/ble_parser/sensirion.py
 
-    func decodeHistoricTemperature(temperature: Int16) -> Double {
+    func decodeTemperature(temperature: Int16) -> Double {
         return ((Double(temperature) / 65535) * 175) - 45
     }
 
-    func decodeHistoricHumidity(humidity: Int16) -> Double {
+    func decodeHumidity(humidity: Int16) -> Double {
         var humidity = ((Double(humidity) / 65535) * 100)
         // When humidity is greater than or equal to 50.0 it returns a negative value
         // and 100 needs to be added
@@ -190,6 +181,21 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
 
     func decodeCO2(co2: Int16) -> Int {
         return Int(co2)
+    }
+
+    func historicMode() {
+        // For historic data download, connect to the peripheral
+        isHistoryMode = true
+        if myPeripheral != nil {
+             myCentral.stopScan()
+             myCentral.connect(myPeripheral, options: nil)
+        }
+    }
+
+    func liveMode() {
+        isHistoryMode = false
+        myCentral.cancelPeripheralConnection(myPeripheral)
+        myCentral.scanForPeripherals(withServices: nil, options: nil)
     }
 }
 
