@@ -30,7 +30,7 @@ struct ContentView: View {
                         .padding(.bottom, 60)
                     Text("\(bleController.temperatureValue, specifier: "%.1f") °C")
                         .font(.system(size: 30, weight: .light))
-                    Text("\(bleController.humidityValue, specifier: "%.0f") %")
+                    Text("\(bleController.humidityValue, specifier: "%.1f") %")
                         .font(.system(size: 30, weight: .light))
                         .padding(1)
                     Text("📡   \(bleController.rssiValue)")

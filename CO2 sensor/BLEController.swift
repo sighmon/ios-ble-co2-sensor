@@ -41,13 +41,37 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     }
 
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("BLE Peripheral found: \(peripheral), \(peripheral.name ?? "No name") (RSSI: \(RSSI))")
-        print(peripheral.services ?? "No services...")
+        // print("BLE Peripheral found: \(peripheral), \(peripheral.name ?? "No name") (RSSI: \(RSSI))")
         if peripheral.identifier.uuidString == co2Identifier {
             myPeripheral = peripheral
             rssiValue = RSSI.intValue
-            central.stopScan()
-            central.connect(peripheral, options: nil)
+
+            // For historic data download, connect to the peripheral here
+            // central.stopScan()
+            // central.connect(peripheral, options: nil)
+
+            // For realtime data, read the advertisementData
+            let data = advertisementData["kCBAdvDataManufacturerData"] as! NSData
+            print("BLE ad data: \(String(describing: data))")
+
+            if !data.isEmpty {
+                let temperature = data.subdata(with: NSMakeRange(6, 2)).withUnsafeBytes {
+                    $0.load(as: Int16.self)
+                }
+                let humidity = data.subdata(with: NSMakeRange(8, 2)).withUnsafeBytes {
+                    $0.load(as: Int16.self)
+                }
+                let co2 = data.subdata(with: NSMakeRange(10, 2)).withUnsafeBytes {
+                    $0.load(as: Int16.self)
+                }
+                print("BLE raw data: \(co2) \(temperature) \(humidity)")
+                if co2 > 0 {
+                    self.co2Value = decodeCO2(co2: co2)
+                    self.temperatureValue = decodeHistoricTemperature(temperature: temperature)
+                    self.humidityValue = decodeHistoricHumidity(humidity: humidity)
+                    print("BLE decoded data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
+                }
+            }
         }
         peripheral.delegate = self
     }
@@ -136,13 +160,25 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         print("BLE included services: \(service)")
     }
 
-    // Decode using https://github.com/custom-components/ble_monitor/blob/master/custom_components/ble_monitor/ble_parser/sensirion.py
+    // Decode using https://github.com/Sensirion/arduino-ble-gadget/issues/22#issuecomment-1227003043
 
     func decodeTemperature(temperature: Int16) -> Double {
-        return ((Double(temperature) / 65535) * 175) - 45
+        // From Sensirion: T = -45 + ((175.0 * ticks) / (2^16 - 1))
+        return -45 + ((175.0 * Double(temperature)) / Double((2^16 - 1)))
     }
 
     func decodeHumidity(humidity: Int16) -> Double {
+        // From Sensirion: RH = (100.0 * ticks) / (2^16 - 1)
+        return (100.0 * Double(humidity)) / Double((2^16 - 1))
+    }
+
+    // Decode using https://github.com/custom-components/ble_monitor/blob/master/custom_components/ble_monitor/ble_parser/sensirion.py
+
+    func decodeHistoricTemperature(temperature: Int16) -> Double {
+        return ((Double(temperature) / 65535) * 175) - 45
+    }
+
+    func decodeHistoricHumidity(humidity: Int16) -> Double {
         var humidity = ((Double(humidity) / 65535) * 100)
         // When humidity is greater than or equal to 50.0 it returns a negative value
         // and 100 needs to be added
@@ -151,7 +187,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         }
         return humidity
     }
-    
+
     func decodeCO2(co2: Int16) -> Int {
         return Int(co2)
     }

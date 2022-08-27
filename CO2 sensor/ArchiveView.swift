@@ -21,6 +21,7 @@ struct ArchiveView: View {
             ForEach(measurements) { measurement in
                 NavigationLink {
                     Text("\(Int(measurement.co2)) ppm\n\(String(format: "%.1f", measurement.temperature)) °C\n\(Int(measurement.humidity)) % \n\n\(measurement.timestamp!, formatter: dateFormatter)")
+                    Text("Latitude: \(measurement.latitude)\nLongitutde: \(measurement.longitude)")
                 } label: {
                     Text("\(Int(measurement.co2)) ppm, \(String(format: "%.1f", measurement.temperature)) °C, \(Int(measurement.humidity)) %")
                 }
