@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ArchiveDetailView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     var measurement: Measurement
 
     var body: some View {
@@ -28,7 +29,7 @@ struct ArchiveDetailView: View {
             Text("Longitutde: \(measurement.longitude)")
                 .font(.system(size: 20, weight: .light))
                 .padding(.bottom, 10)
-            Text("\(measurement.timestamp!, formatter: dateFormatter)")
+            Text("\(measurement.timestamp ?? Date(), formatter: dateFormatter)")
                 .font(.system(size: 20, weight: .light))
         }
         .font(.system(size: 80, weight: .medium))
@@ -44,6 +45,6 @@ private let dateFormatter: DateFormatter = {
 
 struct ArchiveDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ArchiveDetailView(measurement: Measurement()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ArchiveDetailView(measurement: Measurement(context: PersistenceController.preview.container.viewContext)).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
