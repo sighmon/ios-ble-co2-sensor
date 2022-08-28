@@ -71,13 +71,14 @@ struct ContentView: View {
             .onAppear { UIApplication.shared.isIdleTimerDisabled = true }
             .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
         }
+        .navigationViewStyle(.stack)
     }
 
     private func addMeasurement() {
         withAnimation {
             let newMeasurement = Measurement(context: viewContext)
             newMeasurement.timestamp = Date()
-            newMeasurement.co2 = Float(bleController.co2Value)
+            newMeasurement.co2 = Int16(bleController.co2Value)
             newMeasurement.humidity = Float(bleController.humidityValue)
             newMeasurement.temperature = Float(bleController.temperatureValue)
             newMeasurement.latitude = locationManager.lastLocation?.coordinate.latitude ?? 0

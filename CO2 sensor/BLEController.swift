@@ -22,7 +22,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
 
     // Source: https://github.com/Sensirion/arduino-ble-gadget/blob/master/src/Sensirion_GadgetBle_Lib.h
     let co2Identifier = "50B30635-FC9C-57E6-A116-8FF87F780018"
-    // TOFIX: currently retrieves historic data
+    // UUIDs for retrieving historic data
     let co2MonitorServiceUUID = CBUUID(string: "00008000-b38d-4985-720e-0f993a68ee41")
     let co2MonitorCharacteristicUUID = CBUUID(string: "00008004-b38d-4985-720e-0f993a68ee41")
 

@@ -20,6 +20,7 @@
 		0554E6982896404500596C1C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0554E6972896404500596C1C /* CloudKit.framework */; };
 		05A7077B2899203F00FFCC5F /* BLEController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A7077A2899203F00FFCC5F /* BLEController.swift */; };
 		05C5411428B9EE3900A8957D /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C5411328B9EE3900A8957D /* LocationController.swift */; };
+		05C5411628BAF45200A8957D /* ArchiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C5411528BAF45200A8957D /* ArchiveDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		0554E6992896407F00596C1C /* CO2-sensor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "CO2-sensor-Info.plist"; sourceTree = SOURCE_ROOT; };
 		05A7077A2899203F00FFCC5F /* BLEController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEController.swift; sourceTree = "<group>"; };
 		05C5411328B9EE3900A8957D /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
+		05C5411528BAF45200A8957D /* ArchiveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				0554E6952896401F00596C1C /* CO2 sensor.entitlements */,
 				0554E666289637A400596C1C /* CO2_sensorApp.swift */,
 				0554E668289637A400596C1C /* ContentView.swift */,
+				05C5411528BAF45200A8957D /* ArchiveDetailView.swift */,
 				0512DF1A28B24FE7004EAE79 /* ArchiveView.swift */,
 				05C5411328B9EE3900A8957D /* LocationController.swift */,
 				0554E66A289637A500596C1C /* Assets.xcassets */,
@@ -290,6 +293,7 @@
 			files = (
 				0554E673289637A500596C1C /* CO2_sensor.xcdatamodeld in Sources */,
 				0512DF1B28B24FE7004EAE79 /* ArchiveView.swift in Sources */,
+				05C5411628BAF45200A8957D /* ArchiveDetailView.swift in Sources */,
 				0554E670289637A500596C1C /* Persistence.swift in Sources */,
 				05A7077B2899203F00FFCC5F /* BLEController.swift in Sources */,
 				0554E669289637A400596C1C /* ContentView.swift in Sources */,

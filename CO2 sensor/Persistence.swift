@@ -15,7 +15,7 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         for _ in 0..<4 {
             let newMeasurement = Measurement(context: viewContext)
-            newMeasurement.co2 = Float.random(in: 400..<2000)
+            newMeasurement.co2 = Int16.random(in: 400..<2000)
             newMeasurement.humidity = Float.random(in: 40..<100)
             newMeasurement.temperature = Float.random(in: 15..<50)
             newMeasurement.timestamp = Date()
