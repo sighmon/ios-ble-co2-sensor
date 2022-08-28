@@ -4,7 +4,9 @@
 <dict>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>App </string>
 		<string>bluetooth-central</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 </dict>

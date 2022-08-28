@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @StateObject var bleController = BLEController()
+    @StateObject var locationManager = LocationManager()
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
@@ -79,6 +80,8 @@ struct ContentView: View {
             newMeasurement.co2 = Float(bleController.co2Value)
             newMeasurement.humidity = Float(bleController.humidityValue)
             newMeasurement.temperature = Float(bleController.temperatureValue)
+            newMeasurement.latitude = locationManager.lastLocation?.coordinate.latitude ?? 0
+            newMeasurement.longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
 
             do {
                 try viewContext.save()
@@ -119,6 +122,6 @@ private let dateFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portraitUpsideDown)
     }
 }

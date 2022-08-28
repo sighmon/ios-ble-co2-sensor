@@ -186,15 +186,17 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     func historicMode() {
         // For historic data download, connect to the peripheral
         isHistoryMode = true
+        myCentral.stopScan()
         if myPeripheral != nil {
-             myCentral.stopScan()
              myCentral.connect(myPeripheral, options: nil)
         }
     }
 
     func liveMode() {
         isHistoryMode = false
-        myCentral.cancelPeripheralConnection(myPeripheral)
+        if myPeripheral != nil {
+            myCentral.cancelPeripheralConnection(myPeripheral)
+        }
         myCentral.scanForPeripherals(withServices: nil, options: nil)
     }
 }

@@ -20,5 +20,6 @@ An iOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
 ## TODO
 
 - [x] Download historic data
-- [ ] Read realtime data
+- [x] Read realtime data
+- [x] Add location data to saved sensor readings
 - [ ] Export to InfluxDB
