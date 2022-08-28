@@ -23,7 +23,12 @@ struct ArchiveDetailView: View {
 
     var body: some View {
         VStack {
-            Map(coordinateRegion: $region)
+            Map(coordinateRegion: $region, annotationItems: [measurement]) {_ in
+                MapMarker(coordinate: CLLocationCoordinate2D(
+                    latitude: measurement.latitude,
+                    longitude: measurement.longitude
+                ))
+            }
                 .onAppear {
                     setRegion(CLLocationCoordinate2D(
                         latitude: measurement.latitude,
@@ -51,14 +56,14 @@ struct ArchiveDetailView: View {
     }
 
     private func setRegion(_ coordinate: CLLocationCoordinate2D) {
-            region = MKCoordinateRegion(
-                center: coordinate,
-                span: MKCoordinateSpan(
-                    latitudeDelta: 0.005,
-                    longitudeDelta: 0.005
-                )
+        region = MKCoordinateRegion(
+            center: coordinate,
+            span: MKCoordinateSpan(
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01
             )
-        }
+        )
+    }
 }
 
 private let dateFormatter: DateFormatter = {
