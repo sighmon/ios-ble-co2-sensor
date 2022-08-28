@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0512DF1B28B24FE7004EAE79 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0512DF1A28B24FE7004EAE79 /* ArchiveView.swift */; };
+		053138E728BB1A9100760E4E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053138E628BB1A9100760E4E /* MapKit.framework */; };
 		0554E667289637A400596C1C /* CO2_sensorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554E666289637A400596C1C /* CO2_sensorApp.swift */; };
 		0554E669289637A400596C1C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554E668289637A400596C1C /* ContentView.swift */; };
 		0554E66B289637A500596C1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0554E66A289637A500596C1C /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		0512DF1A28B24FE7004EAE79 /* ArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveView.swift; sourceTree = "<group>"; };
+		053138E628BB1A9100760E4E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0554E663289637A400596C1C /* CO2 sensor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CO2 sensor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0554E666289637A400596C1C /* CO2_sensorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CO2_sensorApp.swift; sourceTree = "<group>"; };
 		0554E668289637A400596C1C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				053138E728BB1A9100760E4E /* MapKit.framework in Frameworks */,
 				0554E6982896404500596C1C /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -156,6 +159,7 @@
 		0554E6962896404500596C1C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				053138E628BB1A9100760E4E /* MapKit.framework */,
 				0554E6972896404500596C1C /* CloudKit.framework */,
 			);
 			name = Frameworks;
@@ -471,6 +475,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -506,6 +511,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
