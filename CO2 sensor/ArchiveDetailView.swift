@@ -10,6 +10,7 @@ import MapKit
 
 struct ArchiveDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     var measurement: Measurement
 
     @State private var region = MKCoordinateRegion(
@@ -22,37 +23,48 @@ struct ArchiveDetailView: View {
     )
 
     var body: some View {
-        VStack {
-            Map(coordinateRegion: $region, annotationItems: [measurement]) {_ in
-                MapMarker(coordinate: CLLocationCoordinate2D(
-                    latitude: measurement.latitude,
-                    longitude: measurement.longitude
-                ))
-            }
-                .onAppear {
-                    setRegion(CLLocationCoordinate2D(
+        ZStack {
+            VStack {
+                Map(coordinateRegion: $region, annotationItems: [measurement]) {_ in
+                    MapMarker(coordinate: CLLocationCoordinate2D(
                         latitude: measurement.latitude,
-                        longitude: measurement.longitude)
-                    )
+                        longitude: measurement.longitude
+                    ))
                 }
-                .padding(.top, 0)
+                    .onAppear {
+                        setRegion(CLLocationCoordinate2D(
+                            latitude: measurement.latitude,
+                            longitude: measurement.longitude)
+                        )
+                    }
+                    .padding(.top, 0)
+                    .ignoresSafeArea()
+                Text("\(measurement.co2)")
+                    .padding(.top, 0)
+                Text("ppm CO₂")
+                    .font(.system(size: 30, weight: .light))
+                    .padding(.bottom, 30)
+                Text("\(measurement.temperature, specifier: "%.1f") °C")
+                    .font(.system(size: 30, weight: .light))
+                    .padding(.bottom, 10)
+                Text("\(measurement.humidity, specifier: "%.1f") %")
+                    .font(.system(size: 30, weight: .light))
+                    .padding(.bottom, 30)
+                Text("\(measurement.timestamp ?? Date(), formatter: dateFormatter)")
+                    .font(.system(size: 20, weight: .light))
+                    .padding(.bottom, 30)
+            }
+                .font(.system(size: 80, weight: .medium))
+            LinearGradient(
+                gradient: Gradient(
+                    colors: getColours()
+                ),
+                startPoint: .top,
+                endPoint: UnitPoint(x: 0.5, y: 0.2)
+            )
                 .ignoresSafeArea()
-            Text("\(measurement.co2)")
-                .padding(.top, 0)
-            Text("ppm CO₂")
-                .font(.system(size: 30, weight: .light))
-                .padding(.bottom, 30)
-            Text("\(measurement.temperature, specifier: "%.1f") °C")
-                .font(.system(size: 30, weight: .light))
-                .padding(.bottom, 10)
-            Text("\(measurement.humidity, specifier: "%.1f") %")
-                .font(.system(size: 30, weight: .light))
-                .padding(.bottom, 30)
-            Text("\(measurement.timestamp ?? Date(), formatter: dateFormatter)")
-                .font(.system(size: 20, weight: .light))
-                .padding(.bottom, 30)
+                .allowsHitTesting(false)
         }
-        .font(.system(size: 80, weight: .medium))
     }
 
     private func setRegion(_ coordinate: CLLocationCoordinate2D) {
@@ -63,6 +75,15 @@ struct ArchiveDetailView: View {
                 longitudeDelta: 0.01
             )
         )
+    }
+    func getColours() -> Array<Color> {
+        var colours = Array<Color>()
+        if colorScheme == .light {
+            colours = [Color.white, Color.white.opacity(0)]
+        } else {
+            colours = [Color.black, Color.black.opacity(0)]
+        }
+        return colours
     }
 }
 
