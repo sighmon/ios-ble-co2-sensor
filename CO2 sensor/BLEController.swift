@@ -21,7 +21,11 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     @Published var rssiValue = 0
 
     // Source: https://github.com/Sensirion/arduino-ble-gadget/blob/master/src/Sensirion_GadgetBle_Lib.h
-    let co2Identifier = "50B30635-FC9C-57E6-A116-8FF87F780018"
+    let co2Identifier = [
+        "50B30635-FC9C-57E6-A116-8FF87F780018",
+        "630AA54B-69C8-1177-2B50-8008D54702FE",
+        "0E7C5443-4F8F-B15B-63B9-AB794F4CF68C",
+    ]
     // UUIDs for retrieving historic data
     let co2MonitorServiceUUID = CBUUID(string: "00008000-b38d-4985-720e-0f993a68ee41")
     let co2MonitorCharacteristicUUID = CBUUID(string: "00008004-b38d-4985-720e-0f993a68ee41")
@@ -44,7 +48,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
 
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         // print("BLE Peripheral found: \(peripheral), \(peripheral.name ?? "No name") (RSSI: \(RSSI))")
-        if peripheral.identifier.uuidString == co2Identifier {
+        if  co2Identifier.contains(peripheral.identifier.uuidString) {
             myPeripheral = peripheral
             rssiValue = RSSI.intValue
 
