@@ -1,8 +1,10 @@
-# A Bluetooth CO2 monitor app for iOS
+# A Bluetooth CO2 monitor app for iOS/macOS
 
-An iOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
+An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
 
-<img src="home-screen.png" width="20%">
+<img src="co2-sensor-ios.png" width="30%">
+
+<img src="co2-sensor-macos.png" width="30%"><img src="saved-readings.png" width="30%"><img src="saved-reading-detail.png" width="30%">
 
 ## Hardware
 
@@ -16,11 +18,17 @@ An iOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
 ## Software
 
 * [Arduino ESP32-C3 BLE and HTTP exporter](https://github.com/sighmon/co2_sensor_scd4x_esp32_http_server/tree/add/4-adafruit-qt-py-esp32-c3)
+* Clone this repo, open in Xcode, tap run
+* The app will auto-detect the CO2 sensor and show live data
+* Tap the `Save` button to save the current reading shown
+* Tap the `History` button to show the readings since the sensor was turned on
+* Tap the `Archive` button to see a list of readings saved to Core Data
 
 ## TODO
 
 - [x] Download historic data
 - [x] Read realtime data
 - [x] Add location data to saved sensor readings
+- [x] Add ability to run on macOS
 - [ ] Add [iOS 16 Chart](https://developer.apple.com/documentation/charts) for last 10 readings ([tutorial](https://www.appcoda.com/swiftui-line-charts/))
 - [ ] Export to InfluxDB
