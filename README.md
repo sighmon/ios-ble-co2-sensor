@@ -2,7 +2,7 @@
 
 An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
 
-<img src="co2-sensor-ios.png" width="30%">
+<img src="co2-sensor-ios.png" width="30%"><img src="saved-readings-ios.png" width="30%"><img src="saved-reading-detail-ios.png" width="30%">
 
 <img src="co2-sensor-macos.png" width="30%"><img src="saved-readings.png" width="30%"><img src="saved-reading-detail.png" width="30%">
 
