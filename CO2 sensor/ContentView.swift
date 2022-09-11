@@ -74,6 +74,17 @@ struct ContentView: View {
                                 .foregroundColor(.secondary)
                                 .buttonStyle(.bordered)
                         }
+                        if bleController.isSoundOn {
+                            Button("Silent", action: toggleSound)
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundColor(.secondary)
+                                .buttonStyle(.bordered)
+                        } else {
+                            Button("Sound", action: toggleSound)
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundColor(.secondary)
+                                .buttonStyle(.bordered)
+                        }
                         NavigationLink(destination: ArchiveView()) {
                             Text("Archive")
                                 .font(.system(size: 20, weight: .light))
@@ -127,6 +138,10 @@ struct ContentView: View {
         bleController.rssiValue = 0
         bleController.historicReadingNumber = 0
         bleController.liveMode()
+    }
+
+    private func toggleSound() {
+        bleController.isSoundOn = !bleController.isSoundOn
     }
 
     private func lineColour(co2: Int) -> Color {

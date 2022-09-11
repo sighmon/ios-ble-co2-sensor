@@ -14,6 +14,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     var myPeripheral: CBPeripheral!
     @Published var isBluetoothOn = false
     @Published var isHistoryMode = false
+    @Published var isSoundOn = false
     @Published var co2Value = 0
     @Published var temperatureValue = 0.0
     @Published var humidityValue = 0.0
@@ -69,6 +70,9 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                     }
                     print("BLE raw data: \(co2) \(temperature) \(humidity)")
                     if co2 > 0 {
+                        if isSoundOn && co2 != self.co2Value {
+                            playNote(co2: co2)
+                        }
                         self.co2Value = decodeCO2(co2: co2)
                         self.temperatureValue = decodeTemperature(temperature: temperature)
                         self.humidityValue = decodeHumidity(humidity: humidity)

@@ -20,6 +20,7 @@
 		0554E689289637A500596C1C /* CO2_sensorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554E688289637A500596C1C /* CO2_sensorUITestsLaunchTests.swift */; };
 		0554E6982896404500596C1C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0554E6972896404500596C1C /* CloudKit.framework */; };
 		05A7077B2899203F00FFCC5F /* BLEController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A7077A2899203F00FFCC5F /* BLEController.swift */; };
+		05B69CE228CDCC0800CB5B30 /* MidiController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B69CE128CDCC0800CB5B30 /* MidiController.swift */; };
 		05C5411428B9EE3900A8957D /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C5411328B9EE3900A8957D /* LocationController.swift */; };
 		05C5411628BAF45200A8957D /* ArchiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C5411528BAF45200A8957D /* ArchiveDetailView.swift */; };
 /* End PBXBuildFile section */
@@ -60,6 +61,7 @@
 		0554E6972896404500596C1C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		0554E6992896407F00596C1C /* CO2-sensor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "CO2-sensor-Info.plist"; sourceTree = SOURCE_ROOT; };
 		05A7077A2899203F00FFCC5F /* BLEController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEController.swift; sourceTree = "<group>"; };
+		05B69CE128CDCC0800CB5B30 /* MidiController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiController.swift; sourceTree = "<group>"; };
 		05C5411328B9EE3900A8957D /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
 		05C5411528BAF45200A8957D /* ArchiveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +121,7 @@
 				0554E6952896401F00596C1C /* CO2 sensor.entitlements */,
 				0554E666289637A400596C1C /* CO2_sensorApp.swift */,
 				0554E668289637A400596C1C /* ContentView.swift */,
+				05B69CE128CDCC0800CB5B30 /* MidiController.swift */,
 				05C5411528BAF45200A8957D /* ArchiveDetailView.swift */,
 				0512DF1A28B24FE7004EAE79 /* ArchiveView.swift */,
 				05C5411328B9EE3900A8957D /* LocationController.swift */,
@@ -303,6 +306,7 @@
 				0554E669289637A400596C1C /* ContentView.swift in Sources */,
 				0554E667289637A400596C1C /* CO2_sensorApp.swift in Sources */,
 				05C5411428B9EE3900A8957D /* LocationController.swift in Sources */,
+				05B69CE228CDCC0800CB5B30 /* MidiController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,7 +464,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "CO2 sensor/CO2 sensor.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"CO2 sensor/Preview Content\"";
 				DEVELOPMENT_TEAM = 4P8S9W2NYL;
 				ENABLE_PREVIEWS = YES;
@@ -498,7 +502,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "CO2 sensor/CO2 sensor.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"CO2 sensor/Preview Content\"";
 				DEVELOPMENT_TEAM = 4P8S9W2NYL;
 				ENABLE_PREVIEWS = YES;
