@@ -18,11 +18,27 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
         animation: .default)
     private var measurements: FetchedResults<Measurement>
+    private var screenWidth = UIScreen.main.bounds.size.width
 
     var body: some View {
         NavigationView {
             ZStack {
                 // Color(red: 0.9, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
+
+                // x: 40 - 100
+//                let arraySize = 10
+//                ForEach(0..<arraySize) { index in
+//                    let co2 = Int(bleController.recentCo2[index].co2)
+//                    let colour = lineColour(co2: co2)
+//                    Path { path in
+//                        path.move(to: CGPoint(x: (Int(screenWidth) / arraySize) * index, y: 0))
+//                        path.addLine(to: CGPoint(x: (Int(screenWidth) / arraySize) * index, y: -co2 / 10))
+//                    }
+//                        .stroke(colour, lineWidth: 4)
+//                        .padding(.top, 80)
+//                        .padding(.leading, CGFloat(Int(screenWidth) / arraySize / 2))
+//                }
+
                 VStack {
                     Text("\(bleController.co2Value)")
                         .padding(.top, -60)
@@ -112,6 +128,16 @@ struct ContentView: View {
         bleController.historicReadingNumber = 0
         bleController.liveMode()
     }
+
+    private func lineColour(co2: Int) -> Color {
+        if co2 > 850 && co2 < 1000 {
+            return Color(.systemOrange)
+        }
+        if co2 > 1000 {
+            return Color(.systemRed)
+        }
+        return Color(.systemGreen)
+    }
 }
 
 private let dateFormatter: DateFormatter = {
@@ -123,6 +149,6 @@ private let dateFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portraitUpsideDown)
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
     }
 }

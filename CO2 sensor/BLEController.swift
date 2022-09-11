@@ -21,11 +21,8 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     @Published var rssiValue = 0
 
     // Source: https://github.com/Sensirion/arduino-ble-gadget/blob/master/src/Sensirion_GadgetBle_Lib.h
-    let co2Identifier = [
-        "50B30635-FC9C-57E6-A116-8FF87F780018",
-        "630AA54B-69C8-1177-2B50-8008D54702FE",
-        "0E7C5443-4F8F-B15B-63B9-AB794F4CF68C",
-    ]
+    let sensirionId = "D506"
+    let sensirionGadgetName = "S"
     // UUIDs for retrieving historic data
     let co2MonitorServiceUUID = CBUUID(string: "00008000-b38d-4985-720e-0f993a68ee41")
     let co2MonitorCharacteristicUUID = CBUUID(string: "00008004-b38d-4985-720e-0f993a68ee41")
@@ -48,30 +45,35 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
 
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         // print("BLE Peripheral found: \(peripheral), \(peripheral.name ?? "No name") (RSSI: \(RSSI))")
-        if  co2Identifier.contains(peripheral.identifier.uuidString) {
-            myPeripheral = peripheral
-            rssiValue = RSSI.intValue
 
+        if  peripheral.name == sensirionGadgetName {
             // For realtime data, read the advertisementData
             let data = advertisementData["kCBAdvDataManufacturerData"] as! NSData
             print("BLE ad data: \(String(describing: data))")
 
-            if !data.isEmpty {
-                let temperature = data.subdata(with: NSMakeRange(6, 2)).withUnsafeBytes {
-                    $0.load(as: Int16.self)
-                }
-                let humidity = data.subdata(with: NSMakeRange(8, 2)).withUnsafeBytes {
-                    $0.load(as: Int16.self)
-                }
-                let co2 = data.subdata(with: NSMakeRange(10, 2)).withUnsafeBytes {
-                    $0.load(as: Int16.self)
-                }
-                print("BLE raw data: \(co2) \(temperature) \(humidity)")
-                if co2 > 0 {
-                    self.co2Value = decodeCO2(co2: co2)
-                    self.temperatureValue = decodeTemperature(temperature: temperature)
-                    self.humidityValue = decodeHumidity(humidity: humidity)
-                    print("BLE decoded data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
+            let companyIdentifier = data.subdata(with: NSMakeRange(0, 2)).hexadecimalString(packed: true)
+
+            if companyIdentifier == sensirionId {
+                myPeripheral = peripheral
+                rssiValue = RSSI.intValue
+
+                if !data.isEmpty {
+                    let temperature = data.subdata(with: NSMakeRange(6, 2)).withUnsafeBytes {
+                        $0.load(as: Int16.self)
+                    }
+                    let humidity = data.subdata(with: NSMakeRange(8, 2)).withUnsafeBytes {
+                        $0.load(as: Int16.self)
+                    }
+                    let co2 = data.subdata(with: NSMakeRange(10, 2)).withUnsafeBytes {
+                        $0.load(as: Int16.self)
+                    }
+                    print("BLE raw data: \(co2) \(temperature) \(humidity)")
+                    if co2 > 0 {
+                        self.co2Value = decodeCO2(co2: co2)
+                        self.temperatureValue = decodeTemperature(temperature: temperature)
+                        self.humidityValue = decodeHumidity(humidity: humidity)
+                        print("BLE decoded data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
+                    }
                 }
             }
         }

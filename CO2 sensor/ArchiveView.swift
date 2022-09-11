@@ -20,7 +20,7 @@ struct ArchiveView: View {
         List {
             ForEach(measurements) { measurement in
                 NavigationLink(destination: ArchiveDetailView(measurement: measurement)) {
-                    Text("\(Int(measurement.co2)) ppm, \(String(format: "%.1f", measurement.temperature)) °C, \(Int(measurement.humidity)) %")
+                    Text("\(Int(measurement.co2)) ppm, \(String(format: "%.1f", measurement.temperature))°, \(Int(measurement.humidity))%, \(measurement.timestamp ?? Date(), formatter: dateFormatter)")
                 }
             }
             .onDelete(perform: deleteMeasurements)
@@ -51,7 +51,7 @@ struct ArchiveView: View {
 
 private let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
-    formatter.dateStyle = .medium
+    formatter.dateStyle = .short
     formatter.timeStyle = .short
     return formatter
 }()

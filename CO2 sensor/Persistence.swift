@@ -13,7 +13,7 @@ struct PersistenceController {
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<4 {
+        for _ in 0..<10 {
             let newMeasurement = Measurement(context: viewContext)
             newMeasurement.co2 = Int16.random(in: 400..<2000)
             newMeasurement.humidity = Float.random(in: 40..<100)
