@@ -22,6 +22,7 @@ An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI
 * The app will auto-detect the CO2 sensor and show live data
 * Tap the `Save` button to save the current reading shown
 * Tap the `History` button to show the readings since the sensor was turned on
+* Tap the `Sound` button to play two notes when a sensor reading happens - it first plays middle C corresponding to 1,000 ppm CO2, and then a second note corresponding to the current sensor reading
 * Tap the `Archive` button to see a list of readings saved to Core Data
 
 ## TODO
