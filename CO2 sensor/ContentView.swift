@@ -8,6 +8,8 @@
 import SwiftUI
 import CoreData
 
+var backgroundColour = false
+
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -18,30 +20,39 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
         animation: .default)
     private var measurements: FetchedResults<Measurement>
-    private var screenWidth = UIScreen.main.bounds.size.width
 
     var body: some View {
         NavigationView {
             ZStack {
+                // Background colour
                 // Color(red: 0.9, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
-
-                // x: 40 - 100
-//                let arraySize = 10
-//                ForEach(0..<arraySize) { index in
-//                    let co2 = Int(bleController.recentCo2[index].co2)
-//                    let colour = lineColour(co2: co2)
-//                    Path { path in
-//                        path.move(to: CGPoint(x: (Int(screenWidth) / arraySize) * index, y: 0))
-//                        path.addLine(to: CGPoint(x: (Int(screenWidth) / arraySize) * index, y: -co2 / 10))
-//                    }
-//                        .stroke(colour, lineWidth: 4)
-//                        .padding(.top, 80)
-//                        .padding(.leading, CGFloat(Int(screenWidth) / arraySize / 2))
-//                }
-
+                GeometryReader { geometry in
+                    // Background CO2 reading gauge
+                    Rectangle()
+                        .foregroundColor(co2Colour(co2: bleController.co2Value))
+                        .opacity(0.3)
+                        .ignoresSafeArea(.all)
+                        .frame(
+                            width: geometry.size.width,
+                            height: backgroundHeight(
+                                co2: bleController.co2Value,
+                                height: Int(geometry.size.height)
+                            )
+                        )
+                        .position(
+                            x: geometry.size.width / 2,
+                            y: geometry.size.height - (backgroundHeight(
+                                co2: bleController.co2Value,
+                                height: Int(geometry.size.height)
+                            ) / 2)
+                        )
+                }
                 VStack {
                     Text("\(bleController.co2Value)")
                         .padding(.top, -60)
+                        .onTapGesture {
+                            backgroundColour = !backgroundColour
+                        }
                     Text("ppm CO₂")
                         .font(.system(size: 30, weight: .light))
                         .padding(.bottom, 60)
@@ -62,7 +73,8 @@ struct ContentView: View {
                     HStack {
                         Button("Save", action: addMeasurement)
                             .font(.system(size: 20, weight: .light))
-                            .buttonStyle(.borderedProminent)
+                            .foregroundColor(.secondary)
+                            .buttonStyle(.bordered)
                         if bleController.isHistoryMode {
                             Button("Live", action: liveMode)
                                 .font(.system(size: 20, weight: .light))
@@ -144,14 +156,22 @@ struct ContentView: View {
         bleController.isSoundOn = !bleController.isSoundOn
     }
 
-    private func lineColour(co2: Int) -> Color {
-        if co2 > 850 && co2 < 1000 {
+    private func co2Colour(co2: Int) -> Color {
+        let colour = Color(.systemGreen)
+        if co2 == 0 || !backgroundColour {
+            return colour.opacity(0)
+        }
+        if co2 > 850 && co2 < 1500 {
             return Color(.systemOrange)
         }
-        if co2 > 1000 {
+        if co2 > 1500 {
             return Color(.systemRed)
         }
-        return Color(.systemGreen)
+        return colour
+    }
+
+    private func backgroundHeight(co2: Int, height: Int) -> CGFloat {
+        return CGFloat(height) * CGFloat(co2) / 2000
     }
 }
 
