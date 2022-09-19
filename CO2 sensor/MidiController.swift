@@ -7,6 +7,7 @@
 
 import Foundation
 import AudioToolbox
+import SwiftUI
 
 func playNote(co2: Int16) {
     var sequence : MusicSequence? = nil
@@ -44,4 +45,14 @@ func playNote(co2: Int16) {
     NewMusicPlayer(&musicPlayer)
     MusicPlayerSetSequence(musicPlayer!, sequence)
     MusicPlayerStart(musicPlayer!)
+}
+
+func vibrate(co2: Int16) {
+    if co2 > 2000 {
+        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+    } else if co2 > 1000 {
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+    } else {
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+    }
 }

@@ -72,6 +72,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                     if co2 > 0 {
                         if isSoundOn && co2 != self.co2Value {
                             playNote(co2: co2)
+                            vibrate(co2: co2)
                         }
                         self.co2Value = decodeCO2(co2: co2)
                         self.temperatureValue = decodeTemperature(temperature: temperature)
@@ -115,10 +116,14 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                     $0.load(as: Int16.self)
                 }
                 if co2 > 0 {
+                    if isSoundOn {
+                        playNote(co2: co2)
+                        vibrate(co2: co2)
+                    }
                     self.co2Value = decodeCO2(co2: co2)
                     self.temperatureValue = decodeTemperature(temperature: temperature)
                     self.humidityValue = decodeHumidity(humidity: humidity)
-                     self.historicReadingNumber = Int(readingNumber)
+                    self.historicReadingNumber = Int(readingNumber)
                     print("BLE data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
                 }
             }

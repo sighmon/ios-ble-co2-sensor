@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import AVFoundation
 
 var backgroundColour = false
 
@@ -20,6 +21,10 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
         animation: .default)
     private var measurements: FetchedResults<Measurement>
+
+    init() {
+        setupBackgroundAudio()
+    }
 
     var body: some View {
         NavigationView {
@@ -181,6 +186,17 @@ private let dateFormatter: DateFormatter = {
     formatter.timeStyle = .short
     return formatter
 }()
+
+private func setupBackgroundAudio() {
+    do {
+        try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .allowAirPlay])
+        print("Background playback setup")
+        try AVAudioSession.sharedInstance().setActive(true)
+        print("Background playback session is active")
+    } catch {
+        print(error)
+    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
