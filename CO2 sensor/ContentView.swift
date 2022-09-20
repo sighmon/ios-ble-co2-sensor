@@ -35,21 +35,10 @@ struct ContentView: View {
                     // Background CO2 reading gauge
                     Rectangle()
                         .foregroundColor(co2Colour(co2: bleController.co2Value))
-                        .opacity(0.3)
                         .ignoresSafeArea(.all)
                         .frame(
                             width: geometry.size.width,
-                            height: backgroundHeight(
-                                co2: bleController.co2Value,
-                                height: Int(geometry.size.height)
-                            )
-                        )
-                        .position(
-                            x: geometry.size.width / 2,
-                            y: geometry.size.height - (backgroundHeight(
-                                co2: bleController.co2Value,
-                                height: Int(geometry.size.height)
-                            ) / 2)
+                            height: geometry.size.height
                         )
                 }
                 VStack {
@@ -167,25 +156,17 @@ struct ContentView: View {
             return colour.opacity(0)
         }
         if co2 > 850 && co2 < 1500 {
+            return Color(.systemYellow)
+        }
+        if co2 > 1500 && co2 < 2000 {
             return Color(.systemOrange)
         }
-        if co2 > 1500 {
+        if co2 > 2000 {
             return Color(.systemRed)
         }
         return colour
     }
-
-    private func backgroundHeight(co2: Int, height: Int) -> CGFloat {
-        return CGFloat(height) * CGFloat(co2) / 2000
-    }
 }
-
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .medium
-    formatter.timeStyle = .short
-    return formatter
-}()
 
 private func setupBackgroundAudio() {
     do {

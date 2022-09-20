@@ -72,6 +72,8 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                     if co2 > 0 {
                         if isSoundOn && co2 != self.co2Value {
                             playNote(co2: co2)
+                        }
+                        if isSoundOn {
                             vibrate(co2: co2)
                         }
                         self.co2Value = decodeCO2(co2: co2)
