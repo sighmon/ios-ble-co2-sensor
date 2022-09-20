@@ -157,13 +157,13 @@ struct ContentView: View {
             return colour.opacity(0)
         }
         if co2 > 850 && co2 < 1500 {
-            return Color(.systemYellow)
+            colour = Color(.systemYellow)
         }
         if co2 > 1500 && co2 < 2000 {
-            return Color(.systemOrange)
+            colour = Color(.systemOrange)
         }
         if co2 > 2000 {
-            return Color(.systemRed)
+            colour = Color(.systemRed)
         }
         if colorScheme == .dark {
             colour = colour.opacity(0.4)
