@@ -13,6 +13,7 @@ var backgroundColour = false
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @StateObject var bleController = BLEController()
     @StateObject var locationManager = LocationManager()
@@ -151,7 +152,7 @@ struct ContentView: View {
     }
 
     private func co2Colour(co2: Int) -> Color {
-        let colour = Color(.systemGreen)
+        var colour = Color(.systemGreen)
         if co2 == 0 || !backgroundColour {
             return colour.opacity(0)
         }
@@ -163,6 +164,9 @@ struct ContentView: View {
         }
         if co2 > 2000 {
             return Color(.systemRed)
+        }
+        if colorScheme == .dark {
+            colour = colour.opacity(0.4)
         }
         return colour
     }
