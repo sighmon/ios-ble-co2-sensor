@@ -14,9 +14,11 @@ var backgroundColour = false
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
+
     @StateObject var bleController = BLEController()
     @StateObject var locationManager = LocationManager()
+
+    @State private var navigate = false
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
@@ -44,56 +46,80 @@ struct ContentView: View {
                 }
                 VStack {
                     Text("\(bleController.co2Value)")
-                        .padding(.top, -60)
+                        .padding(.top, -40)
                         .onTapGesture {
                             backgroundColour = !backgroundColour
                         }
                     Text("ppm CO₂")
                         .font(.system(size: 30, weight: .light))
                         .padding(.bottom, 60)
-                    Text("\(bleController.temperatureValue, specifier: "%.1f") °C")
-                        .font(.system(size: 30, weight: .light))
-                    Text("\(bleController.humidityValue, specifier: "%.1f") %")
-                        .font(.system(size: 30, weight: .light))
-                        .padding(1)
-                    if bleController.isHistoryMode {
-                        Text("⏱   \(bleController.historicReadingNumber)")
-                            .font(.system(size: 20, weight: .light))
-                            .padding([.bottom, .top], 60)
-                    } else {
-                        Text("📡   \(bleController.rssiValue)")
-                            .font(.system(size: 20, weight: .light))
-                            .padding([.bottom, .top], 60)
+                    HStack {
+                        Text("\(bleController.temperatureValue, specifier: "%.1f")")
+                            .font(.system(size: 30, weight: .medium))
+                        Text("°C")
+                            .font(.system(size: 30, weight: .light))
                     }
+                    HStack {
+                        Text("\(bleController.humidityValue, specifier: "%.1f")")
+                            .font(.system(size: 30, weight: .medium))
+                        Text("%")
+                            .font(.system(size: 30, weight: .light))
+                    }
+                    .padding(1)
+                    HStack {
+                        if bleController.isHistoryMode {
+                            Text("\(bleController.historicReadingNumber)")
+                                .font(.system(size: 20, weight: .regular))
+                                .frame(width: 40, alignment: .leading)
+                                .onTapGesture {
+                                    liveMode()
+                                }
+                            Image(systemName: "clock")
+                                .font(.system(size: 20))
+                                .onTapGesture {
+                                    liveMode()
+                                }
+                        } else {
+                            Text("\(bleController.rssiValue)")
+                                .font(.system(size: 20, weight: .regular))
+                                .frame(width: 40, alignment: .leading)
+                                .onTapGesture {
+                                    historicMode()
+                                }
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 20))
+                                .onTapGesture {
+                                    historicMode()
+                                }
+                        }
+                        if bleController.isSoundOn {
+                            Image(systemName: "speaker.slash")
+                                .font(.system(size: 20))
+                                .frame(width: 40)
+                                .padding(.leading, 20)
+                                .padding(.trailing, 10)
+                                .onTapGesture {
+                                    toggleSound()
+                                }
+                        } else {
+                            Image(systemName: "speaker.wave.3")
+                                .font(.system(size: 20))
+                                .frame(width: 40)
+                                .padding(.leading, 20)
+                                .padding(.trailing, 10)
+                                .onTapGesture {
+                                    toggleSound()
+                                }
+                        }
+                    }
+                    .padding([.bottom, .top], 60)
                     HStack {
                         Button("Save", action: addMeasurement)
                             .font(.system(size: 20, weight: .light))
                             .foregroundColor(.secondary)
                             .buttonStyle(.bordered)
-                        if bleController.isHistoryMode {
-                            Button("Live", action: liveMode)
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundColor(.secondary)
-                                .buttonStyle(.bordered)
-                        } else {
-                            Button("History", action: historicMode)
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundColor(.secondary)
-                                .buttonStyle(.bordered)
-                        }
-                        if bleController.isSoundOn {
-                            Button("Silent", action: toggleSound)
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundColor(.secondary)
-                                .buttonStyle(.bordered)
-                        } else {
-                            Button("Sound", action: toggleSound)
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundColor(.secondary)
-                                .buttonStyle(.bordered)
-                        }
-                        NavigationLink(destination: ArchiveView()) {
-                            Text("Archive")
+                        NavigationLink(destination: ArchiveView(), isActive: $navigate) {
+                            Button("Archive", action: {navigate = true})
                                 .font(.system(size: 20, weight: .light))
                                 .foregroundColor(.secondary)
                                 .buttonStyle(.bordered)
