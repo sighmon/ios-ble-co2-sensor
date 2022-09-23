@@ -32,6 +32,12 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         super.init()
         myCentral = CBCentralManager(delegate: self, queue: nil)
         myPeripheral = nil
+
+        // For previewing
+        // co2Value = 512
+        // temperatureValue = 24.0
+        // humidityValue = 48.0
+        // rssiValue = -96
     }
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {

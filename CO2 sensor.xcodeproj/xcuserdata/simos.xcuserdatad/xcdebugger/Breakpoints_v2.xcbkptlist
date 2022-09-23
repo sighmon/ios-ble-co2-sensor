@@ -30,8 +30,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "centralManager(_:didDiscover:advertisementData:rssi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "centralManagerDidUpdateState(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "centralManager(_:didConnect:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "centralManager(_:didDiscover:advertisementData:rssi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "peripheral(_:didWriteValueFor:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "peripheral(_:didWriteValueFor:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "peripheral(_:didUpdateValueFor:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "peripheral(_:didUpdateValueFor:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "peripheral(_:didUpdateValueFor:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "CO2 sensor/BLEController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "centralManager(_:didDiscover:advertisementData:rssi:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -2,9 +2,13 @@
 
 An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI.
 
-<img src="co2-sensor-ios.png" width="30%"><img src="saved-readings-ios.png" width="30%"><img src="saved-reading-detail-ios.png" width="30%">
+<img src="co2-sensor-ios-home.png" width="20%" style="padding: 10px;"><img src="co2-sensor-ios-archive.png" width="20%" style="padding: 10px;"><img src="co2-sensor-ios-archive-detail.png" width="20%" style="padding: 10px;"><img src="co2-sensor-ios-dark.png" width="20%" style="padding: 10px;">
 
-<img src="co2-sensor-macos.png" width="30%"><img src="saved-readings.png" width="30%"><img src="saved-reading-detail.png" width="30%">
+<img src="co2-sensor-ios-green.png" width="20%" style="padding: 10px;"><img src="co2-sensor-ios-yellow.png" width="20%" style="padding: 10px;"><img src="co2-sensor-ios-orange.png" width="20%" style="padding: 10px;"><img src="co2-sensor-ios-red.png" width="20%" style="padding: 10px;">
+
+<img src="co2-sensor-macos-home.png" width="20%" style="padding: 10px;"><img src="co2-sensor-macos-archive.png" width="20%" style="padding: 10px;"><img src="co2-sensor-macos-archive-detail.png" width="20%" style="padding: 10px;"><img src="co2-sensor-macos-dark.png" width="20%" style="padding: 10px;">
+
+<img src="co2-sensor-macos-green.png" width="20%" style="padding: 10px;"><img src="co2-sensor-macos-yellow.png" width="20%" style="padding: 10px;"><img src="co2-sensor-macos-orange.png" width="20%" style="padding: 10px;"><img src="co2-sensor-macos-red.png" width="20%" style="padding: 10px;">
 
 ## Hardware
 
@@ -31,6 +35,7 @@ An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI
 - [x] Read realtime data
 - [x] Add location data to saved sensor readings
 - [x] Add ability to run on macOS
+- [ ] Save settings to user defaults
 - [ ] Add [iOS 16 Chart](https://developer.apple.com/documentation/charts) for last 10 readings ([tutorial](https://www.appcoda.com/swiftui-line-charts/))
 - [ ] Add [macOS menu item](https://sarunw.com/posts/swiftui-menu-bar-app/)
 - [ ] Export to InfluxDB

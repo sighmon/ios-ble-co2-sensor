@@ -27,6 +27,9 @@ struct ContentView: View {
 
     init() {
         setupBackgroundAudio()
+
+        // For previewing
+        // backgroundColour = true
     }
 
     var body: some View {
@@ -70,7 +73,7 @@ struct ContentView: View {
                         if bleController.isHistoryMode {
                             Text("\(bleController.historicReadingNumber)")
                                 .font(.system(size: 20, weight: .regular))
-                                .frame(width: 40, alignment: .leading)
+                                .frame(width: 40, alignment: .trailing)
                                 .onTapGesture {
                                     liveMode()
                                 }

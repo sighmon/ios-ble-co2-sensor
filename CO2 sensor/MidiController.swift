@@ -49,7 +49,7 @@ func playNote(co2: Int16) {
 
 func vibrate(co2: Int16) {
     if co2 > 2000 {
-        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        UINotificationFeedbackGenerator().notificationOccurred(.error)
     } else if co2 > 1000 {
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
     } else {
