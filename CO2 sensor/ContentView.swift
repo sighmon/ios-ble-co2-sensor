@@ -9,7 +9,8 @@ import SwiftUI
 import CoreData
 import AVFoundation
 
-var backgroundColour = false
+let kBackgroundColour = "backgroundColour"
+let kIsSoundOn = "isSoundOn"
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -19,6 +20,7 @@ struct ContentView: View {
     @StateObject var locationManager = LocationManager()
 
     @State private var navigate = false
+    @State private var backgroundColour = false
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
@@ -27,9 +29,6 @@ struct ContentView: View {
 
     init() {
         setupBackgroundAudio()
-
-        // For previewing
-        // backgroundColour = true
     }
 
     var body: some View {
@@ -52,6 +51,7 @@ struct ContentView: View {
                         .padding(.top, -40)
                         .onTapGesture {
                             backgroundColour = !backgroundColour
+                            UserDefaults.standard.set(backgroundColour, forKey: kBackgroundColour)
                         }
                     Text("ppm CO₂")
                         .font(.system(size: 30, weight: .light))
@@ -131,7 +131,13 @@ struct ContentView: View {
                 }
             }
             .font(.system(size: 80, weight: .medium))
-            .onAppear { UIApplication.shared.isIdleTimerDisabled = true }
+            .onAppear {
+                UIApplication.shared.isIdleTimerDisabled = true
+
+                // Load user defaults
+                backgroundColour = UserDefaults.standard.bool(forKey: kBackgroundColour)
+                bleController.isSoundOn = UserDefaults.standard.bool(forKey: kIsSoundOn)
+            }
             .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
         }
         .navigationViewStyle(.stack)
@@ -178,12 +184,16 @@ struct ContentView: View {
 
     private func toggleSound() {
         bleController.isSoundOn = !bleController.isSoundOn
+        UserDefaults.standard.set(bleController.isSoundOn, forKey: kIsSoundOn)
     }
 
     private func co2Colour(co2: Int) -> Color {
         var colour = Color(.systemGreen)
-        if co2 == 0 || !backgroundColour {
+        if !backgroundColour {
             return colour.opacity(0)
+        }
+        if co2 == 0 {
+            colour = Color(.systemPink)
         }
         if co2 > 850 && co2 < 1500 {
             colour = Color(.systemYellow)

@@ -35,7 +35,7 @@ An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI
 - [x] Read realtime data
 - [x] Add location data to saved sensor readings
 - [x] Add ability to run on macOS
-- [ ] Save settings to user defaults
+- [x] Save settings to user defaults
 - [ ] Add [iOS 16 Chart](https://developer.apple.com/documentation/charts) for last 10 readings ([tutorial](https://www.appcoda.com/swiftui-line-charts/))
 - [ ] Add [macOS menu item](https://sarunw.com/posts/swiftui-menu-bar-app/)
 - [ ] Export to InfluxDB
