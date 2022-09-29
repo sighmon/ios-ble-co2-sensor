@@ -464,7 +464,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "CO2 sensor/CO2 sensor.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"CO2 sensor/Preview Content\"";
 				DEVELOPMENT_TEAM = 4P8S9W2NYL;
 				ENABLE_PREVIEWS = YES;
@@ -473,8 +473,9 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "We use Bluetooth to receive data from your sensors in the background";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "We use Bluetooth to receive data from your sensors";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We use location data to add to any sensor readings you save";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use location data to add to any sensor readings you save";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location data is only used when saving a CO2 reading to your device. It is used to drop a pin on the map in the archive screen to remind you where you were when you saved the reading.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Location data is only used when saving a CO2 reading to your device. It is used to drop a pin on the map in the archive screen to remind you where you were when you saved the reading.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location data is only used when saving a CO2 reading to your device. It is used to drop a pin on the map in the archive screen to remind you where you were when you saved the reading.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -503,7 +504,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "CO2 sensor/CO2 sensor.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"CO2 sensor/Preview Content\"";
 				DEVELOPMENT_TEAM = 4P8S9W2NYL;
 				ENABLE_PREVIEWS = YES;
@@ -512,8 +513,9 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "We use Bluetooth to receive data from your sensors in the background";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "We use Bluetooth to receive data from your sensors";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We use location data to add to any sensor readings you save";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use location data to add to any sensor readings you save";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location data is only used when saving a CO2 reading to your device. It is used to drop a pin on the map in the archive screen to remind you where you were when you saved the reading.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Location data is only used when saving a CO2 reading to your device. It is used to drop a pin on the map in the archive screen to remind you where you were when you saved the reading.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location data is only used when saving a CO2 reading to your device. It is used to drop a pin on the map in the archive screen to remind you where you were when you saved the reading.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
