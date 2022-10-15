@@ -39,6 +39,10 @@ If you'd like to export your data to a cloud InfluxDB account:
 * Copy your `OrganisationID`, `BucketID`, and generate an `APIKey`
 * Tap the `i` button on the home screen of the app and fill in your details
 
+Here's some sample data in a dashboard in InfluxDB:
+
+<img src="co2-sensor-to-influxdb.png" width="100%">
+
 ## TODO
 
 - [x] Download historic data
