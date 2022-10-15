@@ -21,6 +21,7 @@ struct ContentView: View {
 
     @State private var navigate = false
     @State private var backgroundColour = false
+    @State private var showingSettingsSheet = false
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
@@ -48,6 +49,7 @@ struct ContentView: View {
                 }
                 VStack {
                     Text("\(bleController.co2Value)")
+                        .font(.system(size: 80, weight: .medium))
                         .padding(.top, -40)
                         .onTapGesture {
                             backgroundColour = !backgroundColour
@@ -114,6 +116,17 @@ struct ContentView: View {
                                     toggleSound()
                                 }
                         }
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 20))
+                            .frame(width: 40)
+                            .padding(.leading, 10)
+                            .padding(.trailing, 10)
+                            .onTapGesture {
+                                showingSettingsSheet.toggle()
+                            }
+                            .sheet(isPresented: $showingSettingsSheet) {
+                                SettingsView()
+                            }
                     }
                     .padding([.bottom, .top], 60)
                     HStack {
@@ -130,7 +143,6 @@ struct ContentView: View {
                     }
                 }
             }
-            .font(.system(size: 80, weight: .medium))
             .onAppear {
                 UIApplication.shared.isIdleTimerDisabled = true
 

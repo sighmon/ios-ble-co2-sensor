@@ -29,6 +29,16 @@ An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI
 * Tap the `Sound` button to play two notes when a sensor reading happens - it first plays middle C corresponding to 1,000 ppm CO2, and then a second note corresponding to the current sensor reading
 * Tap the `Archive` button to see a list of readings saved to Core Data
 
+## Data
+
+By pressing the `Save` button, the current reading is saved to your device's Core Data. If you have iCloud setup, the data will sync across your devices.
+
+If you'd like to export your data to a cloud InfluxDB account:
+
+* Sign up for an InfluxDB account: https://cloud2.influxdata.com/signup
+* Copy your `OrganisationID`, `BucketID`, and generate an `APIKey`
+* Tap the `i` button on the home screen of the app and fill in your details
+
 ## TODO
 
 - [x] Download historic data
@@ -36,6 +46,6 @@ An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI
 - [x] Add location data to saved sensor readings
 - [x] Add ability to run on macOS
 - [x] Save settings to user defaults
+- [x] Export to InfluxDB
 - [ ] Add [iOS 16 Chart](https://developer.apple.com/documentation/charts) for last 10 readings ([tutorial](https://www.appcoda.com/swiftui-line-charts/))
 - [ ] Add [macOS menu item](https://sarunw.com/posts/swiftui-menu-bar-app/)
-- [ ] Export to InfluxDB

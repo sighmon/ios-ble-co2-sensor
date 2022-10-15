@@ -86,6 +86,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                         self.temperatureValue = decodeTemperature(temperature: temperature)
                         self.humidityValue = decodeHumidity(humidity: humidity)
                         print("BLE decoded data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
+                        postToInfluxdb()
                     }
                 }
             }
@@ -133,6 +134,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
                     self.humidityValue = decodeHumidity(humidity: humidity)
                     self.historicReadingNumber = Int(readingNumber)
                     print("BLE data: \(self.co2Value) \(self.temperatureValue) \(self.humidityValue)")
+                    postToInfluxdb()
                 }
             }
             peripheral.readRSSI()
@@ -221,6 +223,39 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
             myCentral.cancelPeripheralConnection(myPeripheral)
         }
         myCentral.scanForPeripherals(withServices: nil, options: nil)
+    }
+
+    func postToInfluxdb() {
+        let influxdbOrganisationID = UserDefaults.standard.string(forKey: "influxdbOrganisationID") ?? ""
+        let influxdbBucketID = UserDefaults.standard.string(forKey: "influxdbBucketID") ?? ""
+        let influxdbAPIKey = UserDefaults.standard.string(forKey: "influxdbAPIKey") ?? ""
+        let postToInfluxdb = UserDefaults.standard.bool(forKey: "postToInfluxdb")
+        let influxdbServer = UserDefaults.standard.string(forKey: "influxdbServer") ?? "https://us-central1-1.gcp.cloud2.influxdata.com"
+        let influxdbURL = URL(string: "\(influxdbServer)/api/v2/write?org=\(influxdbOrganisationID)&bucket=\(influxdbBucketID)&precision=ns")!
+        if (influxdbOrganisationID != "" && influxdbBucketID != "" && influxdbAPIKey != "" && postToInfluxdb) {
+            var request = URLRequest(url: influxdbURL)
+            request.httpMethod = "POST"
+            request.setValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("Token \(influxdbAPIKey)", forHTTPHeaderField: "Authorization")
+            request.httpBody = "co2sensor,sensor_id=SCD41 temperature=\(temperatureValue),humidity=\(humidityValue),co2=\(co2Value)".data(using: .utf8)
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if error != nil {
+                    print("-----> data: \(String(describing: data))")
+                    print("-----> error: \(String(describing: error))")
+                    guard let data = data, error == nil else {
+                        print(error?.localizedDescription ?? "No data")
+                        return
+                    }
+                    let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                    print("-----1> responseJSON: \(String(describing: responseJSON))")
+                    if let responseJSON = responseJSON as? [String: Any] {
+                        print("-----2> responseJSON: \(responseJSON)")
+                    }
+                }
+            }
+            task.resume()
+        }
     }
 }
 
