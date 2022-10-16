@@ -20,6 +20,7 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
     @Published var humidityValue = 0.0
     @Published var historicReadingNumber = 0
     @Published var rssiValue = 0
+    @Published var locationManager = LocationManager()
 
     // Source: https://github.com/Sensirion/arduino-ble-gadget/blob/master/src/Sensirion_GadgetBle_Lib.h
     let sensirionId = "D506"
@@ -234,11 +235,13 @@ class BLEController: NSObject, ObservableObject, CBCentralManagerDelegate, CBPer
         let influxdbURL = URL(string: "\(influxdbServer)/api/v2/write?org=\(influxdbOrganisationID)&bucket=\(influxdbBucketID)&precision=ns")!
         if (influxdbOrganisationID != "" && influxdbBucketID != "" && influxdbAPIKey != "" && postToInfluxdb) {
             var request = URLRequest(url: influxdbURL)
+            let latitude = locationManager.lastLocation?.coordinate.latitude ?? 0
+            let longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
             request.httpMethod = "POST"
             request.setValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-Type")
             request.setValue("application/json", forHTTPHeaderField: "Accept")
             request.setValue("Token \(influxdbAPIKey)", forHTTPHeaderField: "Authorization")
-            request.httpBody = "co2sensor,sensor_id=SCD41 temperature=\(temperatureValue),humidity=\(humidityValue),co2=\(co2Value)".data(using: .utf8)
+            request.httpBody = "co2sensor,sensor_id=SCD41 temperature=\(temperatureValue),humidity=\(humidityValue),co2=\(co2Value),latitude=\(latitude),longitude=\(longitude)".data(using: .utf8)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if error != nil {
                     print("-----> data: \(String(describing: data))")

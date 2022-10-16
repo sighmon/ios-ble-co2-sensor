@@ -116,10 +116,10 @@ struct ContentView: View {
                                     toggleSound()
                                 }
                         }
-                        Image(systemName: "info.circle")
+                        Image(systemName: "gear")
                             .font(.system(size: 20))
                             .frame(width: 40)
-                            .padding(.leading, 10)
+                            .padding(.leading, 5)
                             .padding(.trailing, 10)
                             .onTapGesture {
                                 showingSettingsSheet.toggle()
