@@ -13,14 +13,29 @@ struct ArchiveDetailView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var measurement: Measurement
 
-    @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(
+    @State private var region: MKCoordinateRegion = {
+        let initialCoordinate = CLLocationCoordinate2D(
             latitude: 37.334_900,
             longitude: -122.009_020
-        ),
-        latitudinalMeters: 750,
-        longitudinalMeters: 750
-    )
+        )
+        return MKCoordinateRegion(
+            center: initialCoordinate,
+            latitudinalMeters: 750,
+            longitudinalMeters: 750
+        )
+    }()
+
+    init(measurement: Measurement) {
+        self.measurement = measurement
+        _region = State(initialValue: MKCoordinateRegion(
+            center: CLLocationCoordinate2D(
+                latitude: measurement.latitude,
+                longitude: measurement.longitude
+            ),
+            latitudinalMeters: 750,
+            longitudinalMeters: 750
+        ))
+    }
 
     var body: some View {
         ZStack {
@@ -31,12 +46,6 @@ struct ArchiveDetailView: View {
                         longitude: measurement.longitude
                     ))
                 }
-                    .onAppear {
-                        setRegion(CLLocationCoordinate2D(
-                            latitude: measurement.latitude,
-                            longitude: measurement.longitude)
-                        )
-                    }
                     .padding(.top, 0)
                     .ignoresSafeArea()
                 Text("\(measurement.co2)")
@@ -67,15 +76,6 @@ struct ArchiveDetailView: View {
         }
     }
 
-    private func setRegion(_ coordinate: CLLocationCoordinate2D) {
-        region = MKCoordinateRegion(
-            center: coordinate,
-            span: MKCoordinateSpan(
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01
-            )
-        )
-    }
     func getColours() -> Array<Color> {
         var colours = Array<Color>()
         if colorScheme == .light {
