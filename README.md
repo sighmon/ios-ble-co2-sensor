@@ -19,6 +19,15 @@ An iOS/macOS app to read Sensirion SCD-41 CO2 sensor readings written in SwiftUI
 * [JST 2-pin cable](https://core-electronics.com.au/jst-2-pin-cable.html)
 * Nokia BP-6MT 3.7V battery
 
+### Assembly
+
+<img src="https://raw.githubusercontent.com/sighmon/co2_sensor_scd4x_esp32_http_server/add/4-adafruit-qt-py-esp32-c3/scd4x-esp32-c3.jpg" width="100%" />
+
+* (optional) Solder the Lipo charger to the ESP32-C3
+* (optional) Connect the battery to the Lipo charger via the JST 2-pin cable
+* Connect the SCD-41 to the ESP32-C3 via the Qwicc cable
+* Plug the ESP32-C3 into your laptop and upload the Arduino sketch here: [co2_sensor_scd4x_esp32_http_server](https://github.com/sighmon/co2_sensor_scd4x_esp32_http_server/tree/add/4-adafruit-qt-py-esp32-c3#http-response)
+
 ## Software
 
 * [Arduino ESP32-C3 BLE and HTTP exporter](https://github.com/sighmon/co2_sensor_scd4x_esp32_http_server/tree/add/4-adafruit-qt-py-esp32-c3)
