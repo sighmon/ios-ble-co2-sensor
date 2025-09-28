@@ -18,7 +18,8 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.9, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
+                Color(.systemBackground)
+                    .ignoresSafeArea(.all)
                 VStack {
                     Text("InfluxDB settings")
                         .font(.system(size: 30, weight: .medium))
