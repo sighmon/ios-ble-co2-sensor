@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var navigate = false
     @State private var backgroundColour = false
     @State private var showingSettingsSheet = false
+    @Namespace private var actionGlassNamespace
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
@@ -87,7 +88,7 @@ struct ContentView: View {
                         } else {
                             Text("\(bleController.rssiValue)")
                                 .font(.system(size: 20, weight: .regular))
-                                .frame(width: 40, alignment: .leading)
+                                .frame(width: 40, alignment: .trailing)
                                 .onTapGesture {
                                     historicMode()
                                 }
@@ -97,51 +98,23 @@ struct ContentView: View {
                                     historicMode()
                                 }
                         }
-                        if bleController.isSoundOn {
-                            Image(systemName: "speaker.slash")
-                                .font(.system(size: 20))
-                                .frame(width: 40)
-                                .padding(.leading, 20)
-                                .padding(.trailing, 10)
-                                .onTapGesture {
-                                    toggleSound()
-                                }
-                        } else {
-                            Image(systemName: "speaker.wave.3")
-                                .font(.system(size: 20))
-                                .frame(width: 40)
-                                .padding(.leading, 20)
-                                .padding(.trailing, 10)
-                                .onTapGesture {
-                                    toggleSound()
-                                }
-                        }
-                        Image(systemName: "gear")
-                            .font(.system(size: 20))
-                            .frame(width: 40)
-                            .padding(.leading, 5)
-                            .padding(.trailing, 10)
-                            .onTapGesture {
-                                showingSettingsSheet.toggle()
-                            }
-                            .sheet(isPresented: $showingSettingsSheet) {
-                                SettingsView()
-                            }
                     }
-                    .padding([.bottom, .top], 60)
-                    HStack {
-                        Button("Save", action: addMeasurement)
-                            .font(.system(size: 20, weight: .light))
-                            .foregroundColor(.secondary)
-                            .buttonStyle(.bordered)
-                        NavigationLink(destination: ArchiveView(), isActive: $navigate) {
-                            Button("Archive", action: {navigate = true})
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundColor(.secondary)
-                                .buttonStyle(.bordered)
-                        }
-                    }
+                    .padding(.top, 60)
                 }
+
+                VStack {
+                    Spacer()
+                    actionBar
+                }
+                .padding()
+
+                NavigationLink(destination: ArchiveView(), isActive: $navigate) {
+                    EmptyView()
+                }
+                .hidden()
+            }
+            .sheet(isPresented: $showingSettingsSheet) {
+                SettingsView()
             }
             .onAppear {
                 UIApplication.shared.isIdleTimerDisabled = true
@@ -153,6 +126,64 @@ struct ContentView: View {
             .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
         }
         .navigationViewStyle(.stack)
+    }
+
+    @ViewBuilder
+    private var actionBar: some View {
+        if #available(iOS 26.0, *) {
+            GlassEffectContainer {
+                HStack(spacing: 8) {
+                    muteButton
+                        .buttonStyle(.glass)
+                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                    settingsButton
+                        .buttonStyle(.glass)
+                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                    saveButton
+                        .buttonStyle(.glass)
+                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                    archiveButton
+                        .buttonStyle(.glass)
+                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                }
+            }
+        } else {
+            HStack(spacing: 8) {
+                muteButton
+                settingsButton
+                saveButton
+                archiveButton
+            }
+            .font(.system(size: 20, weight: .light))
+            .foregroundColor(.secondary)
+            .buttonStyle(.bordered)
+        }
+    }
+
+    private var muteButton: some View {
+        Button(action: toggleSound) {
+            Image(systemName: bleController.isSoundOn ? "speaker.slash" : "speaker.wave.3")
+        }
+        .accessibilityLabel(bleController.isSoundOn ? "Mute" : "Sound")
+    }
+
+    private var settingsButton: some View {
+        Button {
+            showingSettingsSheet.toggle()
+        } label: {
+            Image(systemName: "gear")
+        }
+        .accessibilityLabel("Settings")
+    }
+
+    private var saveButton: some View {
+        Button("Save", action: addMeasurement)
+    }
+
+    private var archiveButton: some View {
+        Button("Archive") {
+            navigate = true
+        }
     }
 
     private func addMeasurement() {
