@@ -134,17 +134,13 @@ struct ContentView: View {
             GlassEffectContainer {
                 HStack(spacing: 8) {
                     muteButton
-                        .buttonStyle(.glass)
-                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
                     settingsButton
-                        .buttonStyle(.glass)
-                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
                     saveButton
-                        .buttonStyle(.glass)
-                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
                     archiveButton
-                        .buttonStyle(.glass)
-                        .glassEffectUnion(id: "homeActions", namespace: actionGlassNamespace)
+                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
                 }
             }
         } else {
@@ -162,7 +158,9 @@ struct ContentView: View {
 
     private var muteButton: some View {
         Button(action: toggleSound) {
-            Image(systemName: bleController.isSoundOn ? "speaker.slash" : "speaker.wave.3")
+            Label(bleController.isSoundOn ? "Mute" : "Sound", systemImage: bleController.isSoundOn ? "speaker.slash" : "speaker.wave.3")
+                .labelStyle(.iconOnly)
+                .modifier(LiquidGlassActionPadding())
         }
         .accessibilityLabel(bleController.isSoundOn ? "Mute" : "Sound")
     }
@@ -171,18 +169,26 @@ struct ContentView: View {
         Button {
             showingSettingsSheet.toggle()
         } label: {
-            Image(systemName: "gear")
+            Label("Settings", systemImage: "gear")
+                .labelStyle(.iconOnly)
+                .modifier(LiquidGlassActionPadding())
         }
         .accessibilityLabel("Settings")
     }
 
     private var saveButton: some View {
-        Button("Save", action: addMeasurement)
+        Button(action: addMeasurement) {
+            Text("Save")
+                .modifier(LiquidGlassActionPadding())
+        }
     }
 
     private var archiveButton: some View {
-        Button("Archive") {
+        Button {
             navigate = true
+        } label: {
+            Text("Archive")
+                .modifier(LiquidGlassActionPadding())
         }
     }
 
@@ -262,6 +268,29 @@ private func setupBackgroundAudio() {
         print("Background playback session is active")
     } catch {
         print(error)
+    }
+}
+
+private struct LiquidGlassActionPadding: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(0)
+        } else {
+            content
+        }
+    }
+}
+
+@available(iOS 26.0, *)
+private struct LiquidGlassActionStyle: ViewModifier {
+    var namespace: Namespace.ID
+
+    func body(content: Content) -> some View {
+        content
+            .buttonStyle(.glass)
+            .controlSize(.large)
+            .glassEffectUnion(id: "homeActions", namespace: namespace)
     }
 }
 
