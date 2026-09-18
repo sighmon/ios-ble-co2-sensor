@@ -19,7 +19,6 @@ struct ContentView: View {
     @StateObject var bleController = BLEController()
     @StateObject var locationManager = LocationManager()
 
-    @State private var navigate = false
     @State private var backgroundColour = false
     @State private var showingSettingsSheet = false
 
@@ -101,13 +100,6 @@ struct ContentView: View {
                     .padding(.top, 60)
                 }
 
-                NavigationLink(destination: ArchiveView(), isActive: $navigate) {
-                    EmptyView()
-                }
-                .frame(width: 0, height: 0)
-                .hidden()
-                .allowsHitTesting(false)
-
                 VStack {
                     Spacer()
                     actionBar
@@ -132,23 +124,16 @@ struct ContentView: View {
     @ViewBuilder
     private var actionBar: some View {
         if #available(iOS 26.0, *) {
-            // Shared glass capsule; per-button `.glass` unions intercept mouse hits on macOS.
             HStack(spacing: 0) {
-                muteButton
-                settingsButton
-                saveButton
-                archiveButton
+                actionControls
             }
-            .buttonStyle(.borderless)
+            .buttonStyle(HomeActionButtonStyle())
             .padding(.horizontal, 12)
             .padding(.vertical, 4)
             .glassEffect(.regular.interactive(), in: .capsule)
         } else {
             HStack(spacing: 8) {
-                muteButton
-                settingsButton
-                saveButton
-                archiveButton
+                actionControls
             }
             .font(.system(size: 20, weight: .light))
             .foregroundColor(.secondary)
@@ -156,44 +141,42 @@ struct ContentView: View {
         }
     }
 
-    private var muteButton: some View {
-        Button(action: toggleSound) {
-            Label(bleController.isSoundOn ? "Mute" : "Sound", systemImage: bleController.isSoundOn ? "speaker.slash" : "speaker.wave.3")
-                .labelStyle(.iconOnly)
-                .modifier(LiquidGlassActionPadding())
-        }
-        .accessibilityLabel(bleController.isSoundOn ? "Mute" : "Sound")
-        .help(bleController.isSoundOn ? "Mute" : "Sound")
-    }
-
-    private var settingsButton: some View {
-        Button {
+    @ViewBuilder
+    private var actionControls: some View {
+        homeAction(
+            bleController.isSoundOn ? "Mute" : "Sound",
+            systemImage: bleController.isSoundOn ? "speaker.slash" : "speaker.wave.3",
+            action: toggleSound
+        )
+        homeAction("Settings", systemImage: "gear") {
             showingSettingsSheet.toggle()
-        } label: {
-            Label("Settings", systemImage: "gear")
-                .labelStyle(.iconOnly)
-                .modifier(LiquidGlassActionPadding())
         }
-        .accessibilityLabel("Settings")
-        .help("Settings")
-    }
-
-    private var saveButton: some View {
-        Button(action: addMeasurement) {
-            Text("Save")
-                .modifier(LiquidGlassActionPadding())
-        }
-        .help("Save")
-    }
-
-    private var archiveButton: some View {
-        Button {
-            navigate = true
-        } label: {
-            Text("Archive")
-                .modifier(LiquidGlassActionPadding())
+        homeAction("Save", action: addMeasurement)
+        NavigationLink(destination: ArchiveView()) {
+            homeActionLabel("Archive")
         }
         .help("Archive")
+    }
+
+    private func homeAction(
+        _ title: String,
+        systemImage: String? = nil,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            homeActionLabel(title, systemImage: systemImage)
+        }
+        .help(title)
+    }
+
+    @ViewBuilder
+    private func homeActionLabel(_ title: String, systemImage: String? = nil) -> some View {
+        if let systemImage {
+            Label(title, systemImage: systemImage)
+                .labelStyle(.iconOnly)
+        } else {
+            Text(title)
+        }
     }
 
     private func addMeasurement() {
@@ -275,17 +258,14 @@ private func setupBackgroundAudio() {
     }
 }
 
-private struct LiquidGlassActionPadding: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .frame(minWidth: 44, minHeight: 44)
-                .contentShape(Rectangle())
-        } else {
-            content
-        }
+private struct HomeActionButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
+            .opacity(configuration.isPressed ? 0.7 : 1)
     }
 }
 
