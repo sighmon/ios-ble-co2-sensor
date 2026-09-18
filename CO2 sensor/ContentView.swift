@@ -22,7 +22,6 @@ struct ContentView: View {
     @State private var navigate = false
     @State private var backgroundColour = false
     @State private var showingSettingsSheet = false
-    @Namespace private var actionGlassNamespace
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Measurement.timestamp, ascending: true)],
@@ -102,16 +101,18 @@ struct ContentView: View {
                     .padding(.top, 60)
                 }
 
+                NavigationLink(destination: ArchiveView(), isActive: $navigate) {
+                    EmptyView()
+                }
+                .frame(width: 0, height: 0)
+                .hidden()
+                .allowsHitTesting(false)
+
                 VStack {
                     Spacer()
                     actionBar
                 }
                 .padding()
-
-                NavigationLink(destination: ArchiveView(), isActive: $navigate) {
-                    EmptyView()
-                }
-                .hidden()
             }
             .sheet(isPresented: $showingSettingsSheet) {
                 SettingsView()
@@ -131,18 +132,17 @@ struct ContentView: View {
     @ViewBuilder
     private var actionBar: some View {
         if #available(iOS 26.0, *) {
-            GlassEffectContainer {
-                HStack(spacing: 8) {
-                    muteButton
-                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
-                    settingsButton
-                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
-                    saveButton
-                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
-                    archiveButton
-                        .modifier(LiquidGlassActionStyle(namespace: actionGlassNamespace))
-                }
+            // Shared glass capsule; per-button `.glass` unions intercept mouse hits on macOS.
+            HStack(spacing: 0) {
+                muteButton
+                settingsButton
+                saveButton
+                archiveButton
             }
+            .buttonStyle(.borderless)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 4)
+            .glassEffect(.regular.interactive(), in: .capsule)
         } else {
             HStack(spacing: 8) {
                 muteButton
@@ -163,6 +163,7 @@ struct ContentView: View {
                 .modifier(LiquidGlassActionPadding())
         }
         .accessibilityLabel(bleController.isSoundOn ? "Mute" : "Sound")
+        .help(bleController.isSoundOn ? "Mute" : "Sound")
     }
 
     private var settingsButton: some View {
@@ -174,6 +175,7 @@ struct ContentView: View {
                 .modifier(LiquidGlassActionPadding())
         }
         .accessibilityLabel("Settings")
+        .help("Settings")
     }
 
     private var saveButton: some View {
@@ -181,6 +183,7 @@ struct ContentView: View {
             Text("Save")
                 .modifier(LiquidGlassActionPadding())
         }
+        .help("Save")
     }
 
     private var archiveButton: some View {
@@ -190,6 +193,7 @@ struct ContentView: View {
             Text("Archive")
                 .modifier(LiquidGlassActionPadding())
         }
+        .help("Archive")
     }
 
     private func addMeasurement() {
@@ -275,22 +279,13 @@ private struct LiquidGlassActionPadding: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
             content
-                .padding(0)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         } else {
             content
         }
-    }
-}
-
-@available(iOS 26.0, *)
-private struct LiquidGlassActionStyle: ViewModifier {
-    var namespace: Namespace.ID
-
-    func body(content: Content) -> some View {
-        content
-            .buttonStyle(.glass)
-            .controlSize(.large)
-            .glassEffectUnion(id: "homeActions", namespace: namespace)
     }
 }
 
